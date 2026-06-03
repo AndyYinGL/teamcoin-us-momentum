@@ -105,6 +105,63 @@ sharp betting market. Same conclusion from two very different markets: **market
 efficiency is real, and a signal's survival depends on the inefficiency it feeds
 on.**
 
+## Extension: Russell 2000 small caps, sub-factors, and weight optimization
+
+S&P 500 is the most-arbitraged universe on earth, so the natural question is
+whether the reversal inefficiency survives in **small caps**, where liquidity is
+thinner, retail share is higher, and shorting is harder. Russell 2000
+constituents (iShares IWM holdings, 1,836 names downloaded) were run through the
+same pipeline.
+
+**Three markets of increasing efficiency:**
+
+![Three-tier comparison](notebooks/figures/three_tier_comparison.png)
+
+**1. The raw reversal does strengthen in small caps** — traditional reversal
+Rank IC goes from −0.20% (large cap) to −1.40% daily / −2.45% overnight (small
+cap, overnight ICIR −0.45). So short-term reversal inefficiency *does* persist
+further down the cap spectrum.
+
+**2. But the "team coin" flip mechanism backfires in the U.S.** Breaking the
+factor into its 18 sub-components (3 return dimensions × traditional / vol-flip /
+turnover-flip, both universes) shows the flip *reverses* the sign of a
+genuinely-negative reversal IC — e.g. small-cap overnight turnover-flip turns
+−2.45% into +2.25%. The report's flip is tuned to the A-share structure
+("reversal contaminated by identifiable momentum"); U.S. small-cap reversal is
+"clean," so flipping only destroys signal.
+
+**3. No learned weighting beats the naive factor out-of-sample.** A walk-forward
+test (24-month trailing window to learn weights, next-month OOS IC) compared four
+combinations on small caps:
+
+| combination (walk-forward OOS) | OOS Rank IC | ICIR |
+|---|---|---|
+| naive: traditional overnight reversal alone | −0.0233 | −0.42 |
+| equal-weight 3 traditional (report style) | −0.0122 | −0.15 |
+| rolling IR-weight (6 sub-factors) | +0.0198 | +0.30 |
+| Ridge ML learned weights (6 sub-factors) | −0.0121 | −0.15 |
+
+The simplest single factor has the strongest OOS IC; neither IR-weighting nor a
+Ridge model beats it. IR-weighting actually *flips sign* by over-weighting the
+counterproductive flip factors — a clean illustration of how mechanical
+weight-learning chases in-sample noise.
+
+**4. And even the "strongest" factor is not tradeable.** Built into an actual
+decile long-short, the small-cap overnight reversal is **−13.5% gross**, with
+157% monthly turnover; realistic small-cap spreads bury it further:
+
+![Cost erosion](notebooks/figures/cost_erosion.png)
+
+The negative IC was *diffuse* — spread across the cross-section, not concentrated
+in the tails — so it never becomes a tradeable two-tail bet. This is exactly the
+distinction between a statistically detectable IC and a tradeable edge.
+
+**Answer to "what is the optimal weighting?"** Across both universes, the honest
+answer is that no weighting — equal, IR, or machine-learned — produces tradeable
+alpha in U.S. equities. The A-share factor's profitability is a property of
+A-share inefficiency, not of the construction; in efficient markets the simplest
+baseline wins and even it is not tradeable after costs.
+
 ## Method notes & honest caveats
 
 - **Universe:** current S&P 500 constituents — survivorship bias (delisted names
