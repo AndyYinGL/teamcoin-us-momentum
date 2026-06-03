@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Data (large, re-downloadable from yfinance; not committed)
+data/
+
+# OS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
